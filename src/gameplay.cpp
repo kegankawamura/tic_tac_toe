@@ -4,14 +4,6 @@
 #include "board.hpp"
 #include "translateCmd.hpp"
 
-void displayHelp()
-{
-    static const std::string help {
-        "How to play Tic-Tac-Toe"
-    };
-
-    std::cout << help << std::endl;
-}
 
 
 int gameplay()

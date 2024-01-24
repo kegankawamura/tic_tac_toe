@@ -10,7 +10,6 @@
 
 #include <string>
 
-void displayHelp();
 
 int gameplay();
 
