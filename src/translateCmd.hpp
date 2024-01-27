@@ -4,34 +4,40 @@
 #include <utility>
 
 //
+// Normalize string
+//
+std::string normalizeStr(std::string strIn);
+
+
+//
 // Exit command
 //
-bool isExit(std::string inStr);
+bool isExit(const std::string& inStr);
 
 //
 // Help command
 //
-bool isHelp(std::string inStr);
+bool isHelp(const std::string& inStr);
 
 //
 // Check if string indicates a valid move command
 //
-bool isMove(std::string inStr);
+bool isMove(const std::string& inStr);
 
 //
 // Undo last move
 //
-bool isUndo(std::string inStr);
+bool isUndo(const std::string& inStr);
 
 //
 // Display board
 //
-bool isDisp(std::string inStr);
+bool isDisp(const std::string& inStr);
 
 //
 // Restart game without exiting
 //
-bool isRestart(std::string inStr);
+bool isRestart(const std::string& inStr);
 
 //
 // Help instructions
@@ -42,6 +48,6 @@ void displayHelp();
 // Translate a valid move command string to
 // a (row, col) pair
 //
-std::pair<uint8_t, uint8_t> cmd2Move(std::string inStr);
+std::pair<uint8_t, uint8_t> cmd2Move(const std::string& inStr);
 
 #endif

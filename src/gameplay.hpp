@@ -9,9 +9,14 @@
 //
 
 #include <string>
+#include "board.hpp"
 
 
 int gameplay();
+
+std::string otherPlayerStr(const std::string& p1p2);
+
+Player askForXO();
 
 
 #endif

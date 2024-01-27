@@ -6,6 +6,7 @@
 
 enum Player{ O, X, N };
 
+Player otherPlayerEnum(Player xo);
 
 class Board
 {

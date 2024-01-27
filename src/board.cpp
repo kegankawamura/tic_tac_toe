@@ -2,8 +2,22 @@
 #include <sstream>
 #include "board.hpp"
 
-Board::Board() :
-    playHist{}
+Player otherPlayerEnum(Player xo)
+{
+    switch(xo)
+    {
+        case Player::X:
+            return Player::O;
+
+        case Player::O:
+            return Player::X;
+
+        default:
+            return Player::N;
+    }
+}
+
+Board::Board() : playHist{}
 {
     clear();
 }
