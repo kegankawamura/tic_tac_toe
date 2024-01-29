@@ -7,24 +7,24 @@
 static const std::string P1{"Player 1"};
 static const std::string P2{"Player 2"};
 
-std::string nextPlayer(const std::string &p1p2)
+std::string otherPlayerStr(const std::string &p1p2)
 {
-    std::string otherPlayerStr;
+    std::string otherPlayer;
 
     if (p1p2 == P1)
     {
-        otherPlayerStr = P2;
+        otherPlayer = P2;
     }
     else if (p1p2 == P2)
     {
-        otherPlayerStr = P1;
+        otherPlayer = P1;
     }
     else
     {
         std::string msg{"Not a valid player string."};
         throw std::invalid_argument(msg);
     }
-    return otherPlayerStr;
+    return otherPlayer;
 }
 
 Player askForXO()
@@ -57,6 +57,15 @@ Player askForXO()
     return playerEnum;
 }
 
+bool askForRestart()
+{
+    std::string cmd;
+    std::cout << "\nPlay again? (y/n): ";
+    std::cin >> cmd;
+
+    return normalizeStr(cmd) == "y";
+}
+
 int gameplay()
 {
     std::string playerStr { P1 };
@@ -76,12 +85,6 @@ int gameplay()
         std::cout << playerStr <<  " > ";
         std::cin >> cmd;
 
-        //
-        // Create input parser(s) in translateCmd.cpp
-        // is***(cmd) can help define the commands
-        // supported by the gameplay
-        //
-
         cmd = normalizeStr(cmd);
 
         if (isExit(cmd))
@@ -91,19 +94,61 @@ int gameplay()
         else if (isHelp(cmd))
         {
             displayHelp();
-            continue;
         }
         else if (isMove(cmd))
         {
-            // TODO: translate command to move
-            //       add move to board
-            playerStr = otherPlayerStr(playerStr);
-            playerEnum = otherPlayerEnum(playerEnum);
+            auto move { cmd2Move(cmd) };
+            if ( !board.addMove(playerEnum, move.first, move.second) )
+            {
+                std::cout << "\tInvalid move. Try again." << std::endl;
+            }
+            else
+            {
+                board.displayBoard();
+                Player winner;
+                bool gameOver = board.isGameOver(winner);
+                if (gameOver)
+                {
+                    if (winner != Player::N)
+                    {
+                        std::cout << playerStr << " wins the game!" << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "It's a tie!" << std::endl;
+                    }
+                    if (askForRestart())
+                    {
+                        board.clear();
+                        displayHelp();
+                        playerStr = P1;
+                        playerEnum = askForXO();
+                    }
+                    else
+                    {
+                        std::cout << "Thanks for playing!" << std::endl;
+                        return 0;
+                    }
+                }
+                else
+                {
+                    playerStr = otherPlayerStr(playerStr);
+                    playerEnum = otherPlayerEnum(playerEnum);
+                }
+            }
         }
         else if (isUndo(cmd))
         {
-            board.undoLastMove();
-            // TODO: return move so we know how to set the next player
+            Player last = board.undoLastMove();
+            if (last == Player::N)
+            {
+                std::cout << "\tNo moves to undo!" << std::endl;
+            }
+            else
+            {
+                playerStr = otherPlayerStr(playerStr);
+                playerEnum = last;
+            }
         }
         else if (isDisp(cmd))
         {
@@ -114,7 +159,7 @@ int gameplay()
             board.clear();
             displayHelp();
             playerStr = P1;
-            Player playerEnum{askForXO()};
+            playerEnum = askForXO();
         }
         else
         {
@@ -122,8 +167,6 @@ int gameplay()
             std::cout << "\tHmm... command not recognized. Try again.\n"
                       << "\tType 'help' to list the valid commands."
                       << std::endl;
-        }
-
-                    
+        }           
     }
 }

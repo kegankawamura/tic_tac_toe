@@ -1,6 +1,8 @@
 #include "translateCmd.hpp"
 
 #include<iostream>
+#include<map>
+#include<utility
 #include<vector>
 
 
@@ -67,4 +69,29 @@ void displayHelp()
         "How to play Tic-Tac-Toe"};
 
     std::cout << help << std::endl;
+}
+
+
+std::pair<uint8_t, uint8_t> cmd2Move(const std::string& inStr)
+{
+    if (inStr.size() != 2)
+    {
+        std::string msg{ "Move command should have exactly two characters." };
+        throw std::invalid_argument(msg);
+    }
+
+    static const std::map<char, uint8_t> c2mRow{{'a', 1}, {'b', 2}, {'c', 3}};
+    static const std::map<char, uint8_t> c2mCol{{'1', 1}, {'2', 2}, {'3', 3}};
+
+    auto rowIter{c2mRow.find(inStr[0])};
+    auto colIter{c2mCol.find(inStr[1])};
+
+    if (rowIter == c2mRow.end() || colIter == c2mCol.end())
+    {
+        std::string msg{"Move command should have a letter 'a', 'b', or 'c' "
+                        "followed by a number '1', '2', or '3'." };
+        throw std::invalid_argument(msg);
+    }
+
+    return std::make_pair(*rowIter, *colIter);
 }

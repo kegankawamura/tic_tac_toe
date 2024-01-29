@@ -43,7 +43,7 @@ public:
     //
     // Undo the last move made
     //
-    void undoLastMove();
+    Player undoLastMove();
 
     //
     // Remove a move from the board
@@ -56,7 +56,7 @@ public:
     // Check if there is a Tic-Tac-Toe winner
     // Return Player::N if no winner
     //
-    Player isGameOver();
+    bool isGameOver(Player& winner);
 
     //
     // Print out the current state of the board

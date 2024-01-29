@@ -52,14 +52,13 @@ bool Board::addMove(Player p, uint8_t row, uint8_t col)
     }
     
 }
-
-void Board::undoLastMove()
+Player Board::undoLastMove()
 {
     try
     {
         if (playHist.empty())
         {
-            return;
+            return Player::N;
         }
 
         Move lastMove { playHist.back() };
@@ -71,7 +70,10 @@ void Board::undoLastMove()
         {
             grid[rc2Idx(lastMove.row, lastMove.col)] = lastMove.p;
         }
+
         playHist.pop_back();
+
+        return lastMove.p;
 
         // Consider returning Move?
     }
@@ -101,7 +103,7 @@ void Board::rmvMove(uint8_t row, uint8_t col)
     
 }
 
-Player Board::isGameOver()
+bool Board::isGameOver(Player& winner)
 {
     //
     // Need to check 8 configurations
@@ -110,14 +112,37 @@ Player Board::isGameOver()
     // 2 Diagonal
     //
 
-    Player winner;
+    Player p;
 
+    //
+    // Check if tie
+    //
+    bool tie { true };
+    for (Player p : grid)
+    {
+        if (p == Player::N)
+        {
+            tie = false;
+            break;
+        }
+    }
+
+    if (tie)
+    {
+        winner = Player::N;
+        return true;
+    }
+
+    //
+    // Check if winner
+    //
     for (uint8_t i = 1; i <= 3; ++i)
     {
         // winner = checkVertical(i);
-        if ((winner = checkVertical(i)) != Player::N || (winner = checkHorizontal(i)) != Player::N)
+        if ((p = checkVertical(i)) != Player::N || (p = checkHorizontal(i)) != Player::N)
         {
-            return winner;
+            winner = p;
+            return true;
         }
         // winner = checkHorizontal(i);
         // if (winner != Player::N)
@@ -129,11 +154,12 @@ Player Board::isGameOver()
     {
         if ((winner = checkDiagonal(i)) != Player::N)
         {
-            return winner;
+            winner = p;
+            return true;
         }
     }
 
-    return Player::N;
+    return false;
 }
 
 void Board::displayBoard()

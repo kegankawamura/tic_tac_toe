@@ -18,5 +18,8 @@ std::string otherPlayerStr(const std::string& p1p2);
 
 Player askForXO();
 
+bool askForRestart();
+
+
 
 #endif
