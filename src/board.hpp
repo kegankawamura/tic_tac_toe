@@ -15,8 +15,8 @@ public:
     //
     // Constants identifying the type of a move
     //
-    static const bool RMV{false};
-    static const bool ADD{true};
+    static constexpr bool RMV{false};
+    static constexpr bool ADD{true};
 
     //
     // Struct describing a move in Tic-Tac-Toe

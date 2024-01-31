@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <string>
 #include "gameplay.hpp"
+#include "translateCmd.hpp"
 
 bool findCommandOption( char** begin, char** end, const std::string& option )
 {
@@ -21,6 +22,8 @@ int main( int argc, char* argv[])
         //
         // Show instructions
         //
+        displayHelp();
+        return 0;
     }
 
     //
@@ -59,6 +62,6 @@ int main( int argc, char* argv[])
         //
     }
 
-    return 0;
+    return gameplay();
 
 }
