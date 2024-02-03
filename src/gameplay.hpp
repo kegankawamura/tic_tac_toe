@@ -1,7 +1,6 @@
 #ifndef GAMEPLAY_H
 #define GAMEPLAY_H
 
-
 //
 // This header file defines the top-level functionality required
 // for a standard game of tic-tac-toe. It shall define the interface
@@ -10,7 +9,6 @@
 
 #include <string>
 #include "board.hpp"
-
 
 int gameplay();
 

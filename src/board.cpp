@@ -28,14 +28,14 @@ void Board::clear()
     playHist.clear();
 }
 
-bool Board::addMove(Player p, uint8_t row, uint8_t col)
+bool Board::addMove(Player p, int row, int col)
 {
-    try
-    {
+    // try
+    // {
         checkRowBounds(row);
         checkColBounds(col);
 
-        uint8_t idx{rc2Idx(row, col)};
+        int idx{rc2Idx(row, col)};
 
         if ( grid[idx] != Player::N)
         {
@@ -45,17 +45,19 @@ bool Board::addMove(Player p, uint8_t row, uint8_t col)
         Move add{p, ADD, row, col};
         grid[idx] = p;
         playHist.push_back(add);
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+        return true;
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
     
 }
+
 Player Board::undoLastMove()
 {
-    try
-    {
+    // try
+    // {
         if (playHist.empty())
         {
             return Player::N;
@@ -76,30 +78,30 @@ Player Board::undoLastMove()
         return lastMove.p;
 
         // Consider returning Move?
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
 }
 
-void Board::rmvMove(uint8_t row, uint8_t col)
+void Board::rmvMove(int row, int col)
 {
-    try
-    {
+    // try
+    // {
         checkRowBounds(row);
         checkColBounds(col);
 
-        uint8_t idx{rc2Idx(row, col)};
+        int idx{rc2Idx(row, col)};
         Move rmv {grid[idx], RMV, row, col};
 
         grid[idx] = Player::N;
         playHist.push_back( rmv );
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
     
 }
 
@@ -136,7 +138,7 @@ bool Board::isGameOver(Player& winner)
     //
     // Check if winner
     //
-    for (uint8_t i = 1; i <= 3; ++i)
+    for (int i = 1; i <= 3; ++i)
     {
         // winner = checkVertical(i);
         if ((p = checkVertical(i)) != Player::N || (p = checkHorizontal(i)) != Player::N)
@@ -150,7 +152,7 @@ bool Board::isGameOver(Player& winner)
         //     return winner;
         // }
     }
-    for (uint8_t i = 1; i <= 2; ++i)
+    for (int i = 1; i <= 2; ++i)
     {
         if ((winner = checkDiagonal(i)) != Player::N)
         {
@@ -194,7 +196,7 @@ void Board::displayBoard()
 // --- Private Methods ---
 //
 
-void Board::checkRowBounds(uint8_t row)
+void Board::checkRowBounds(int row)
 {
     if (row < 1 || row > 3)
     {
@@ -202,7 +204,7 @@ void Board::checkRowBounds(uint8_t row)
         throw std::invalid_argument(msg);
     }
 }
-void Board::checkColBounds(uint8_t col)
+void Board::checkColBounds(int col)
 {
     if (col < 1 || col > 3)
     {
@@ -214,7 +216,7 @@ void Board::checkColBounds(uint8_t col)
 //
 // Translate (row, col) to the grid index
 //
-inline uint8_t Board::rc2Idx(uint8_t row, uint8_t col)
+inline int Board::rc2Idx(int row, int col)
 {
     return 3*(row-1) + (col-1);
 }
@@ -222,58 +224,58 @@ inline uint8_t Board::rc2Idx(uint8_t row, uint8_t col)
 //
 // Check for a winner in a vertical column 
 //
-Player Board::checkVertical(uint8_t col)
+Player Board::checkVertical(int col)
 {
-    try
-    {
+    // try
+    // {
         checkColBounds(col);
 
-        uint8_t firstIdx{col - 1};
+        int firstIdx{col - 1};
         if (grid[firstIdx] == grid[firstIdx + 3] && grid[firstIdx] == grid[firstIdx + 6])
         {
             return grid[firstIdx];
         }
 
         return Player::N;
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
     
 }
 
 //
 // Check for a winner in a horizontal row
 //
-Player Board::checkHorizontal(uint8_t row)
+Player Board::checkHorizontal(int row)
 {
-    try
-    {
+    // try
+    // {
         checkRowBounds(row);
 
-        uint8_t firstIdx{3 * (row - 1)};
+        int firstIdx{3 * (row - 1)};
         if (grid[firstIdx] == grid[firstIdx + 1] && grid[firstIdx] == grid[firstIdx + 2])
         {
             return grid[firstIdx];
         }
 
         return Player::N;
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
     
 }
 
 //
 // Check for a winner on a diagonal
 //
-Player Board::checkDiagonal(uint8_t diag)
+Player Board::checkDiagonal(int diag)
 {
-    try
-    {
+    // try
+    // {
         if (diag == 1)
         {
             if (grid[0] == grid[4] && grid[0] == grid[8])
@@ -295,11 +297,11 @@ Player Board::checkDiagonal(uint8_t diag)
         }
 
         return Player::N;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
 }
 
 char Board::player2Char(Player p)

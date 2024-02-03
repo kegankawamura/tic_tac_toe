@@ -2,7 +2,7 @@
 
 #include<iostream>
 #include<map>
-#include<utility
+#include<utility>
 #include<vector>
 
 
@@ -17,7 +17,7 @@ std::string normalizeStr(std::string strIn)
     return strIn;
 }
 
-inline bool isExit(const std::string& inStr)
+bool isExit(const std::string& inStr)
 {
     //
     // Make it case insensitive?
@@ -27,7 +27,7 @@ inline bool isExit(const std::string& inStr)
     return normalizeStr(inStr) == "exit";
 }
 
-inline bool isHelp(const std::string& inStr)
+bool isHelp(const std::string& inStr)
 {
     return normalizeStr(inStr) == "help";
 }
@@ -48,17 +48,17 @@ bool isMove(const std::string& inStr)
     return false;
 }
 
-inline bool isUndo(const std::string& inStr)
+bool isUndo(const std::string& inStr)
 {
     return normalizeStr(inStr) == "undo";
 }
 
-inline bool isDisp(std::string inStr)
+bool isDisp(const std::string &inStr)
 {
     return normalizeStr(inStr) == "display";
 }
 
-bool isRestart(std::string inStr)
+bool isRestart(const std::string &inStr)
 {
     return normalizeStr(inStr) == "restart";
 }
@@ -72,7 +72,7 @@ void displayHelp()
 }
 
 
-std::pair<uint8_t, uint8_t> cmd2Move(const std::string& inStr)
+std::pair<int, int> cmd2Move(const std::string& inStr)
 {
     if (inStr.size() != 2)
     {
@@ -80,8 +80,8 @@ std::pair<uint8_t, uint8_t> cmd2Move(const std::string& inStr)
         throw std::invalid_argument(msg);
     }
 
-    static const std::map<char, uint8_t> c2mRow{{'a', 1}, {'b', 2}, {'c', 3}};
-    static const std::map<char, uint8_t> c2mCol{{'1', 1}, {'2', 2}, {'3', 3}};
+    static const std::map<char, int> c2mRow{{'a', 1}, {'b', 2}, {'c', 3}};
+    static const std::map<char, int> c2mCol{{'1', 1}, {'2', 2}, {'3', 3}};
 
     auto rowIter{c2mRow.find(inStr[0])};
     auto colIter{c2mCol.find(inStr[1])};
@@ -93,5 +93,5 @@ std::pair<uint8_t, uint8_t> cmd2Move(const std::string& inStr)
         throw std::invalid_argument(msg);
     }
 
-    return std::make_pair(*rowIter, *colIter);
+    return std::make_pair(rowIter->second, colIter->second);
 }
