@@ -169,25 +169,25 @@ void Board::displayBoard()
 
     std::stringstream gridOut;
 
-    gridOut << "   |   |   \n"
-            << " " << player2Char(grid[0]) << " | "
-            << player2Char(grid[1]) << " | "
-            << player2Char(grid[2]) << " \n"
-            << "___|___|___\n";
+    gridOut << "     |     |     \n"
+            << "  " << player2Char(grid[0]) << "  |  "
+            << player2Char(grid[1]) << "  |  "
+            << player2Char(grid[2]) << "  \n"
+            << "_____|_____|_____\n";
 
-    gridOut << "   |   |   \n"
-            << " " << player2Char(grid[3]) << " | "
-            << player2Char(grid[4]) << " | "
-            << player2Char(grid[5]) << " \n"
-            << "___|___|___\n";
+    gridOut << "     |     |     \n"
+            << "  " << player2Char(grid[3]) << "  |  "
+            << player2Char(grid[4]) << "  |  "
+            << player2Char(grid[5]) << "  \n"
+            << "_____|_____|_____\n";
 
-    gridOut << "   |   |   \n"
-            << " " << player2Char(grid[6]) << " | "
-            << player2Char(grid[7]) << " | "
-            << player2Char(grid[8]) << " \n"
-            << "   |   |   \n";
+    gridOut << "     |     |     \n"
+            << "  " << player2Char(grid[6]) << "  |  "
+            << player2Char(grid[7]) << "  |  "
+            << player2Char(grid[8]) << "  \n"
+            << "     |     |     \n";
 
-    std::cout << gridOut.str() << std::endl;
+    std::cout << "\n" << gridOut.str() << std::endl;
 
     return;
 }
