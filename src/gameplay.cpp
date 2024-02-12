@@ -66,8 +66,14 @@ bool askForRestart()
     return normalizeStr(cmd) == "y";
 }
 
-int gameplay()
+int gameplay(const std::unordered_set<Options> &opt)
 {
+
+    if (opt.find(Options::ULTIMATE) != opt.end())
+    {
+        return ultimateGameplay(opt);
+    }
+
     std::string playerStr { P1 };
     Player playerEnum { askForXO() };
 
@@ -104,7 +110,10 @@ int gameplay()
             }
             else
             {
-                board.displayBoard();
+                if (opt.find(Options::QUIET) == opt.end())
+                {
+                    board.displayBoard();
+                }
                 Player winner;
                 bool gameOver = board.isGameOver(winner);
                 if (gameOver)
@@ -169,4 +178,11 @@ int gameplay()
                       << std::endl;
         }           
     }
+}
+
+int ultimateGameplay(const std::unordered_set<Options> &opt)
+{
+
+    std::string playerStr{P1};
+    Player playerEnum{askForXO()};
 }

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include "gameplay.hpp"
 #include "translateCmd.hpp"
@@ -12,6 +13,8 @@ bool findCommandOption( char** begin, char** end, const std::string& option )
 int main( int argc, char* argv[])
 {
 
+    std::unordered_set<Options> opt;
+    int numOpt{ 0 };
     //
     // -h, -help
     // Show instructions
@@ -36,6 +39,7 @@ int main( int argc, char* argv[])
         //
         // Play against AI
         //
+        numOpt++;
     }
 
     //
@@ -48,6 +52,8 @@ int main( int argc, char* argv[])
         //
         // Don't show grid every time a move is made
         //
+        opt.insert(Options::QUIET);
+        numOpt++;
     }
 
     //
@@ -60,8 +66,20 @@ int main( int argc, char* argv[])
         //
         // Play ultimate tictactoe
         //
+        opt.insert(Options::ULTIMATE);
+        numOpt++;
     }
 
-    return gameplay();
+    if (numOpt != argc - 1)
+    {
+        std::cout << "At least one invalid command argument detected: " << std::endl;
+        for (int i = 1; i < argc; ++i)
+        {
+            std::cout << "\t" << argv[i] << std::endl;
+        }
+        return 1;
+    }
+
+    return gameplay(opt);
 
 }

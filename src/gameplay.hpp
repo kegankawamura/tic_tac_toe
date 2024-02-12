@@ -9,8 +9,17 @@
 
 #include <string>
 #include "board.hpp"
+#include <unordered_set>
 
-int gameplay();
+enum class Options {
+    QUIET,
+    AI,
+    ULTIMATE
+};
+
+int gameplay(const std::unordered_set<Options>& opt);
+
+int ultimateGameplay(const std::unordered_set<Options> &opt);
 
 std::string otherPlayerStr(const std::string& p1p2);
 
