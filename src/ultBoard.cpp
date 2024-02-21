@@ -10,7 +10,7 @@ UltBoard::UltBoard() : playHist{}
 
 void UltBoard::clear()
 {
-    for ( Board& b : grid)
+    for ( Board& b : grid )
     {
         b.clear();
     }
@@ -144,6 +144,37 @@ void UltBoard::displayBoard() const
     return;
 }
 
+void UltBoard::displayInnerBoard(int row, int col) const
+{
+
+    int idx{rc2Idx(row, col)};
+
+    std::stringstream gridIn;
+
+    gridIn << "     |     |     \n"
+           << "  " << player2Char(grid[idx][0]) << "  |  "
+           << player2Char(grid[idx][1]) << "  |  "
+           << player2Char(grid[idx][2]) << "  \n"
+           << "_____|_____|_____\n";
+
+    gridIn << "     |     |     \n"
+           << "  " << player2Char(grid[idx][3]) << "  |  "
+           << player2Char(grid[idx][4]) << "  |  "
+           << player2Char(grid[idx][5]) << "  \n"
+           << "_____|_____|_____\n";
+
+    gridIn << "     |     |     \n"
+           << "  " << player2Char(grid[idx][6]) << "  |  "
+           << player2Char(grid[idx][7]) << "  |  "
+           << player2Char(grid[idx][8]) << "  \n"
+           << "     |     |     \n";
+
+    std::cout << "\n"
+              << gridIn.str() << std::endl;
+
+    return;
+}
+
 //
 // Print out the current state of the board
 //
@@ -152,25 +183,56 @@ void UltBoard::displayFullBoard() const
 
     std::stringstream gridOut;
 
-    gridOut << " " << player2Char(overGrid[0]) << " | "
-            << player2Char(overGrid[1]) << " | "
-            << player2Char(overGrid[2]) << "  |  "
-            << "_____|_____|_____\n";
+    gridOut << "     |     |           |     |           |     |     \n";
 
-    gridOut << "     |     |     \n"
-            << "  " << player2Char(overGrid[3]) << "  |  "
-            << player2Char(overGrid[4]) << "  |  "
-            << player2Char(overGrid[5]) << "  \n"
-            << "_____|_____|_____\n";
+    for (int i = 0; i < 3; ++i)
+    {
+        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+                << player2Char(grid[i][1]) << "  |  "
+                << player2Char(grid[i][2]) << "   ";
+    }
+    gridOut << "\n";
 
-    gridOut << "     |     |     \n"
-            << "  " << player2Char(overGrid[6]) << "  |  "
-            << player2Char(overGrid[7]) << "  |  "
-            << player2Char(overGrid[8]) << "  \n"
-            << "     |     |     \n";
+    for (int i = 0; i < 3; ++i)
+    {
+        gridOut << "_____|_____|_____ ";
+    }
+    gridOut << "\n";
+
+    gridOut << "     |     |           |     |           |     |     \n";
+
+    for (int i = 3; i < 6; ++i)
+    {
+        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+                << player2Char(grid[i][1]) << "  |  "
+                << player2Char(grid[i][2]) << "   ";
+    }
+    gridOut << "\n";
+
+    for (int i = 0; i < 3; ++i)
+    {
+        gridOut << "_____|_____|_____ ";
+    }
+    gridOut << "\n";
+
+    gridOut << "     |     |           |     |           |     |     \n";
+
+    for (int i = 3; i < 6; ++i)
+    {
+        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+                << player2Char(grid[i][1]) << "  |  "
+                << player2Char(grid[i][2]) << "   ";
+    }
+    gridOut << "\n";
+
+    for (int i = 0; i < 3; ++i)
+    {
+        gridOut << "     |     |      ";
+    }
+    gridOut << "\n";
 
     std::cout << "\n"
-              << gridOut.str() << std::endl;
+                << gridOut.str() << std::endl;
 
     return;
 }
@@ -214,9 +276,14 @@ Player UltBoard::checkVertical(int col) const
     checkColBounds(col);
 
     int firstIdx{col - 1};
-    if (grid[firstIdx] == grid[firstIdx + 3] && grid[firstIdx] == grid[firstIdx + 6])
+
+    //
+    // TODO: Memoize this
+    //
+    Player top, mid, bot;
+    if (overGrid[firstIdx] == overGrid[firstIdx + 3] && overGrid[firstIdx] == overGrid[firstIdx + 6])
     {
-        return grid[firstIdx];
+        return overGrid[firstIdx];
     }
 
     return Player::N;
@@ -237,9 +304,11 @@ Player UltBoard::checkHorizontal(int row) const
     checkRowBounds(row);
 
     int firstIdx{3 * (row - 1)};
-    if (grid[firstIdx] == grid[firstIdx + 1] && grid[firstIdx] == grid[firstIdx + 2])
+
+    Player left, mid, right;
+    if (overGrid[firstIdx] == overGrid[firstIdx + 1] && overGrid[firstIdx] == overGrid[firstIdx + 2])
     {
-        return grid[firstIdx];
+        return overGrid[firstIdx];
     }
 
     return Player::N;
@@ -257,23 +326,24 @@ Player UltBoard::checkDiagonal(int diag) const
 {
     // try
     // {
+
     if (diag == 1)
     {
-        if (grid[0] == grid[4] && grid[0] == grid[8])
+        if (overGrid[0] == overGrid[4] && overGrid[0] == overGrid[8])
         {
-            return grid[0];
+            return overGrid[0];
         }
     }
     else if (diag == 2)
     {
-        if (grid[2] == grid[4] && grid[2] == grid[6])
+        if (overGrid[2] == overGrid[4] && overGrid[2] == overGrid[6])
         {
-            return grid[2];
+            return overGrid[2];
         }
     }
     else
     {
-        std::string msg{"Diagonal must be 1 o 2."};
+        std::string msg{"Diagonal must be 1 or 2."};
         throw std::invalid_argument(msg);
     }
 
@@ -283,4 +353,19 @@ Player UltBoard::checkDiagonal(int diag) const
     // {
     //     std::cerr << e.what() << '\n';
     // }
+}
+
+char UltBoard::player2Char(Player p) const
+{
+    switch (p)
+    {
+    case Player::N:
+        return ' ';
+
+    case Player::O:
+        return 'O';
+
+    case Player::X:
+        return 'X';
+    }
 }

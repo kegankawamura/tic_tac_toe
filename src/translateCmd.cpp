@@ -1,5 +1,6 @@
 #include "translateCmd.hpp"
 
+#include<array>
 #include<iostream>
 #include<map>
 #include<utility>
@@ -48,7 +49,21 @@ bool isMove(const std::string& inStr)
     return false;
 }
 
-bool isUndo(const std::string& inStr)
+bool isUltMove(const std::string &inStr)
+{
+    std::string moveStr{normalizeStr(inStr)};
+
+    if (moveStr.size() == 4)
+    {
+        if(isMove(moveStr.substr(0,2)) && isMove(moveStr.substr(2,2)))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool isUndo(const std::string &inStr)
 {
     return normalizeStr(inStr) == "undo";
 }
@@ -56,6 +71,19 @@ bool isUndo(const std::string& inStr)
 bool isDisp(const std::string &inStr)
 {
     return normalizeStr(inStr) == "display";
+}
+
+bool isUltDisp(const std::string &inStr)
+{
+    std::string normStr { normalizeStr(inStr) };
+    if (normStr.substr(0, 7) == "display")
+    {
+        if (isMove(normStr.substr(7)) || normStr.substr(7) == "full")
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool isRestart(const std::string &inStr)
@@ -124,4 +152,21 @@ std::pair<int, int> cmd2Move(const std::string& inStr)
     }
 
     return std::make_pair(rowIter->second, colIter->second);
+}
+
+std::array<int, 4> ultCmd2Move(const std::string &inStr)
+{
+    if (inStr.size() != 4)
+    {
+        std::string msg{"Move command should have exactly four characters."};
+        throw std::invalid_argument(msg);
+    }
+
+    auto outerMove{cmd2Move(inStr.substr(0, 2))};
+    auto innerMove{cmd2Move(inStr.substr(2, 2))};
+
+    std::array<int, 4> ultMove { outerMove.first, outerMove.second,
+                                 innerMove.first, innerMove.second };
+
+    return ultMove;
 }

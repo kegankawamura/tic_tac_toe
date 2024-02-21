@@ -13,7 +13,7 @@ bool findCommandOption( char** begin, char** end, const std::string& option )
 int main( int argc, char* argv[])
 {
 
-    std::unordered_set<Options> opt;
+    std::unordered_set<int> opt;
     int numOpt{ 0 };
     //
     // -h, -help
@@ -52,7 +52,7 @@ int main( int argc, char* argv[])
         //
         // Don't show grid every time a move is made
         //
-        opt.insert(Options::QUIET);
+        opt.insert(QUIET);
         numOpt++;
     }
 
@@ -66,7 +66,7 @@ int main( int argc, char* argv[])
         //
         // Play ultimate tictactoe
         //
-        opt.insert(Options::ULTIMATE);
+        opt.insert(ULTIMATE);
         numOpt++;
     }
 

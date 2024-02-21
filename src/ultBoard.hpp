@@ -49,6 +49,11 @@ public:
     //
     // Print out the current state of the board
     //
+    void displayInnerBoard(int row, int col) const;
+
+    //
+    // Print out the current state of the board
+    //
     void displayFullBoard() const;
 
 private:

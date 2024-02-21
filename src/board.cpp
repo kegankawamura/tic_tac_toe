@@ -105,7 +105,7 @@ void Board::rmvMove(int row, int col)
     
 }
 
-bool Board::isGameOver(Player& winner)
+bool Board::isGameOver(Player& winner) const
 {
     //
     // Need to check 8 configurations
@@ -164,7 +164,7 @@ bool Board::isGameOver(Player& winner)
     return false;
 }
 
-void Board::displayBoard()
+void Board::displayBoard() const
 {
 
     std::stringstream gridOut;
@@ -192,11 +192,16 @@ void Board::displayBoard()
     return;
 }
 
+Player Board::operator[](size_t i) const
+{
+    return grid[i];
+}
+
 //
 // --- Private Methods ---
 //
 
-void Board::checkRowBounds(int row)
+void Board::checkRowBounds(int row) const
 {
     if (row < 1 || row > 3)
     {
@@ -204,7 +209,7 @@ void Board::checkRowBounds(int row)
         throw std::invalid_argument(msg);
     }
 }
-void Board::checkColBounds(int col)
+void Board::checkColBounds(int col) const
 {
     if (col < 1 || col > 3)
     {
@@ -216,7 +221,7 @@ void Board::checkColBounds(int col)
 //
 // Translate (row, col) to the grid index
 //
-inline int Board::rc2Idx(int row, int col)
+inline int Board::rc2Idx(int row, int col) const
 {
     return 3*(row-1) + (col-1);
 }
@@ -224,7 +229,7 @@ inline int Board::rc2Idx(int row, int col)
 //
 // Check for a winner in a vertical column 
 //
-Player Board::checkVertical(int col)
+Player Board::checkVertical(int col) const
 {
     // try
     // {
@@ -248,7 +253,7 @@ Player Board::checkVertical(int col)
 //
 // Check for a winner in a horizontal row
 //
-Player Board::checkHorizontal(int row)
+Player Board::checkHorizontal(int row) const
 {
     // try
     // {
@@ -272,7 +277,7 @@ Player Board::checkHorizontal(int row)
 //
 // Check for a winner on a diagonal
 //
-Player Board::checkDiagonal(int diag)
+Player Board::checkDiagonal(int diag) const
 {
     // try
     // {
@@ -304,7 +309,7 @@ Player Board::checkDiagonal(int diag)
     // }
 }
 
-char Board::player2Char(Player p)
+char Board::player2Char(Player p) const
 {
     switch(p)
     {

@@ -61,42 +61,46 @@ public:
     // Check if there is a Tic-Tac-Toe winner
     // Return Player::N if no winner
     //
-    bool isGameOver(Player& winner);
+    bool isGameOver(Player& winner) const;
 
     //
     // Print out the current state of the board
     //
-    void displayBoard();
+    void displayBoard() const;
 
+    //
+    // Return player in grid space.
+    //
+    Player operator[](size_t i) const;
 
 private:
 
     //
     // Throw an exception if row is out of range
     //
-    void checkRowBounds(int row);
+    void checkRowBounds(int row) const;
 
     //
     // Throw an exception if column is out of range
     //
-    void checkColBounds(int col);
+    void checkColBounds(int col) const;
 
     //
     // Convert a (row, col) pair to the grid index
     //
-    int rc2Idx(int row, int col);
+    int rc2Idx(int row, int col) const;
 
     //
     // Check if there's a winner along column, row, or diagonal
     //
-    Player checkVertical(int col);
-    Player checkHorizontal(int row);
-    Player checkDiagonal(int diag);
+    Player checkVertical(int col) const;
+    Player checkHorizontal(int row) const;
+    Player checkDiagonal(int diag) const; 
 
     //
     // Translate player to character
     //
-    char player2Char(Player p);
+    char player2Char(Player p) const;
 
 
     //

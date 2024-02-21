@@ -4,8 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(TicTacToe)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}")
-set(HEADERS board.hpp gameplay.hpp translateCmd.hpp)
-set(SOURCE board.cpp gameplay.cpp translateCmd.cpp)
+set(HEADERS board.hpp gameplay.hpp translateCmd.hpp ultBoard.hpp)
+set(SOURCE board.cpp gameplay.cpp translateCmd.cpp ultBoard.cpp)
 
 add_library(my_lib STATIC ${SOURCE})
 target_include_directories(my_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -2,10 +2,12 @@
 #include <string>
 #include "gameplay.hpp"
 #include "board.hpp"
+#include "ultBoard.hpp"
 #include "translateCmd.hpp"
 
 static const std::string P1{"Player 1"};
 static const std::string P2{"Player 2"};
+
 
 std::string otherPlayerStr(const std::string &p1p2)
 {
@@ -66,10 +68,10 @@ bool askForRestart()
     return normalizeStr(cmd) == "y";
 }
 
-int gameplay(const std::unordered_set<Options> &opt)
+int gameplay(const std::unordered_set<int> &opt)
 {
 
-    if (opt.find(Options::ULTIMATE) != opt.end())
+    if (opt.find(ULTIMATE) != opt.end())
     {
         return ultimateGameplay(opt);
     }
@@ -110,7 +112,7 @@ int gameplay(const std::unordered_set<Options> &opt)
             }
             else
             {
-                if (opt.find(Options::QUIET) == opt.end())
+                if (opt.find(QUIET) == opt.end())
                 {
                     board.displayBoard();
                 }
@@ -180,9 +182,123 @@ int gameplay(const std::unordered_set<Options> &opt)
     }
 }
 
-int ultimateGameplay(const std::unordered_set<Options> &opt)
+int ultimateGameplay(const std::unordered_set<int> &opt)
 {
 
     std::string playerStr{P1};
     Player playerEnum{askForXO()};
+
+    //
+    // Create Board object
+    //
+    UltBoard board;
+
+    displayHelp();
+
+    std::string cmd;
+
+    while (true)
+    {
+        std::cout << playerStr << " > ";
+        std::cin >> cmd;
+
+        cmd = normalizeStr(cmd);
+
+        if (isExit(cmd))
+        {
+            return 0;
+        }
+        else if (isHelp(cmd))
+        {
+            displayHelp();
+        }
+        else if (isUltMove(cmd))
+        {
+            auto move{ultCmd2Move(cmd)};
+            if (!board.addMove(playerEnum, move[0], move[1], move[2], move[3] ))
+            {
+                std::cout << "\tInvalid move. Try again." << std::endl;
+            }
+            else
+            {
+                if (opt.find(QUIET) == opt.end())
+                {
+                    board.displayBoard();
+                }
+                Player winner;
+                bool gameOver = board.isGameOver(winner);
+                if (gameOver)
+                {
+                    if (winner != Player::N)
+                    {
+                        std::cout << playerStr << " wins the game!" << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "It's a tie!" << std::endl;
+                    }
+                    if (askForRestart())
+                    {
+                        board.clear();
+                        displayHelp();
+                        playerStr = P1;
+                        playerEnum = askForXO();
+                    }
+                    else
+                    {
+                        std::cout << "Thanks for playing!" << std::endl;
+                        return 0;
+                    }
+                }
+                else
+                {
+                    playerStr = otherPlayerStr(playerStr);
+                    playerEnum = otherPlayerEnum(playerEnum);
+                }
+            }
+        }
+        else if (isUndo(cmd))
+        {
+            Player last = board.undoLastMove();
+            if (last == Player::N)
+            {
+                std::cout << "\tNo moves to undo!" << std::endl;
+            }
+            else
+            {
+                playerStr = otherPlayerStr(playerStr);
+                playerEnum = last;
+            }
+        }
+        else if (isDisp(cmd))
+        {
+            board.displayBoard();
+        }
+        else if (isUltDisp(cmd))
+        {
+            if (cmd.substr(7) == "full")
+            {
+                board.displayFullBoard();
+            }
+            else
+            {
+                auto gridSpace{cmd2Move(cmd.substr(7, 2))};
+                board.displayInnerBoard(gridSpace.first, gridSpace.second);
+            }
+        }
+        else if (isRestart(cmd))
+        {
+            board.clear();
+            displayHelp();
+            playerStr = P1;
+            playerEnum = askForXO();
+        }
+        else
+        {
+            // Not a valid command
+            std::cout << "\tHmm... command not recognized. Try again.\n"
+                      << "\tType 'help' to list the valid commands."
+                      << std::endl;
+        }
+    }
 }
