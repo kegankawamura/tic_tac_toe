@@ -56,6 +56,10 @@ public:
     //
     void rmvMove(int row, int col);
 
+    //
+    //
+    //
+    std::array<int,2> lastMove();
 
     //
     // Check if there is a Tic-Tac-Toe winner

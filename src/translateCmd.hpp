@@ -55,6 +55,11 @@ bool isRestart(const std::string &inStr);
 void displayHelp();
 
 //
+// Help instructions
+//
+void displayUltHelp();
+
+//
 // Translate a valid move command string to
 // a (row, col) pair
 //

@@ -36,10 +36,23 @@ public:
     void rmvMove(int orow, int ocol, int irow, int icol);
 
     //
+    // Returns the last move in the play history.
+    //
+    std::array<int,4> lastMove();
+
+
+    //
     // Check if there is a Tic-Tac-Toe winner
     // Return Player::N if no winner
     //
     bool isGameOver(Player &winner) const;
+
+    //
+    // Check if there is a Tic-Tac-Toe winner in row
+    // 'orow' and column 'ocol'
+    // Return Player::N if no winner
+    //
+    bool isGameOver(int orow, int ocol, Player &winner) const;
 
     //
     // Print out the current state of the board

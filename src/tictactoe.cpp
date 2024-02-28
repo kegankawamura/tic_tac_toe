@@ -67,6 +67,7 @@ int main( int argc, char* argv[])
         // Play ultimate tictactoe
         //
         opt.insert(ULTIMATE);
+        std::cout << "Ultimate" << std::endl;
         numOpt++;
     }
 
@@ -80,6 +81,7 @@ int main( int argc, char* argv[])
         return 1;
     }
 
+    std::cout << (opt.find(ULTIMATE) != opt.end()) << std::endl;
     return gameplay(opt);
 
 }

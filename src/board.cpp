@@ -105,7 +105,21 @@ void Board::rmvMove(int row, int col)
     
 }
 
-bool Board::isGameOver(Player& winner) const
+std::array<int, 2> Board::lastMove()
+{
+    std::array<int, 2> mv{0, 0};
+    if (playHist.empty())
+    {
+        return mv;
+    }
+    Move idx { playHist.back() };
+    mv[0] = idx.row;
+    mv[1] = idx.col;
+
+    return mv;
+}
+
+bool Board::isGameOver(Player &winner) const
 {
     //
     // Need to check 8 configurations

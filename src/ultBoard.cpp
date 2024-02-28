@@ -68,6 +68,26 @@ void UltBoard::rmvMove(int orow, int ocol, int irow, int icol)
     return;
 }
 
+std::array<int, 4> UltBoard::lastMove()
+{
+    std::array<int,4> mv{0, 0, 0, 0};
+    if (playHist.empty())
+    {
+        return mv;
+    }
+    int outerIdx { playHist.back() };
+    mv[0] = outerIdx / 3;
+    mv[1] = outerIdx - mv[0] * 3;
+
+    auto innerMv { grid[outerIdx].lastMove() };
+
+    mv[2] = innerMv[0];
+    mv[3] = innerMv[1];
+
+    return mv;
+
+}
+
 bool UltBoard::isGameOver(Player &winner) const
 {
 
@@ -112,6 +132,16 @@ bool UltBoard::isGameOver(Player &winner) const
         }
     }
 
+    return false;
+}
+
+bool UltBoard::isGameOver(int orow, int ocol, Player &winner) const
+{
+    if ( overGrid[rc2Idx(orow, ocol)] != Player::N )
+    {
+        winner = overGrid[rc2Idx(orow, ocol)];
+        return true;
+    }
     return false;
 }
 
@@ -183,53 +213,93 @@ void UltBoard::displayFullBoard() const
 
     std::stringstream gridOut;
 
-    gridOut << "     |     |           |     |           |     |     \n";
-
-    for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
     {
-        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
-                << player2Char(grid[i][1]) << "  |  "
-                << player2Char(grid[i][2]) << "   ";
+
+        gridOut << "     |     |           |     |           |     |     \n";
+
+        for (int i = 3 * j; i < 3 * j + 3; ++i)
+        {
+            gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+                    << player2Char(grid[i][1]) << "  |  "
+                    << player2Char(grid[i][2]) << "   ";
+        }
+        gridOut << "\n";
+
+        for (int i = 0; i < 3; ++i)
+        {
+            gridOut << "_____|_____|_____ ";
+        }
+        gridOut << "\n";
+
+        gridOut << "     |     |           |     |           |     |     \n";
+
+        for (int i = 3 * j; i < 3 * j + 3; ++i)
+        {
+            gridOut << "  " << player2Char(grid[i][3]) << "  |  "
+                    << player2Char(grid[i][4]) << "  |  "
+                    << player2Char(grid[i][5]) << "   ";
+        }
+        gridOut << "\n";
+
+        for (int i = 0; i < 3; ++i)
+        {
+            gridOut << "_____|_____|_____ ";
+        }
+        gridOut << "\n";
+
+        gridOut << "     |     |           |     |           |     |     \n";
+
+        for (int i = 3 * j; i < 3 * j + 3; ++i)
+        {
+            gridOut << "  " << player2Char(grid[i][6]) << "  |  "
+                    << player2Char(grid[i][7]) << "  |  "
+                    << player2Char(grid[i][8]) << "   ";
+        }
+        gridOut << "\n";
+
+        gridOut << "     |     |           |     |           |     |     \n\n";
     }
-    gridOut << "\n";
 
-    for (int i = 0; i < 3; ++i)
-    {
-        gridOut << "_____|_____|_____ ";
-    }
-    gridOut << "\n";
 
-    gridOut << "     |     |           |     |           |     |     \n";
 
-    for (int i = 3; i < 6; ++i)
-    {
-        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
-                << player2Char(grid[i][1]) << "  |  "
-                << player2Char(grid[i][2]) << "   ";
-    }
-    gridOut << "\n";
 
-    for (int i = 0; i < 3; ++i)
-    {
-        gridOut << "_____|_____|_____ ";
-    }
-    gridOut << "\n";
+    // for (int i = 0; i < 3; ++i)
+    // {
+    //     gridOut << "_____|_____|_____ ";
+    // }
+    // gridOut << "\n";
 
-    gridOut << "     |     |           |     |           |     |     \n";
+    // for (int i = 3; i < 6; ++i)
+    // {
+    //     gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+    //             << player2Char(grid[i][1]) << "  |  "
+    //             << player2Char(grid[i][2]) << "   ";
+    // }
+    // gridOut << "\n";
+    
 
-    for (int i = 3; i < 6; ++i)
-    {
-        gridOut << "  " << player2Char(grid[i][0]) << "  |  "
-                << player2Char(grid[i][1]) << "  |  "
-                << player2Char(grid[i][2]) << "   ";
-    }
-    gridOut << "\n";
+    // for (int i = 0; i < 3; ++i)
+    // {
+    //     gridOut << "_____|_____|_____ ";
+    // }
+    // gridOut << "\n";
 
-    for (int i = 0; i < 3; ++i)
-    {
-        gridOut << "     |     |      ";
-    }
-    gridOut << "\n";
+    // gridOut << "     |     |           |     |           |     |     \n";
+
+    // for (int i = 3; i < 6; ++i)
+    // {
+    //     gridOut << "  " << player2Char(grid[i][0]) << "  |  "
+    //             << player2Char(grid[i][1]) << "  |  "
+    //             << player2Char(grid[i][2]) << "   ";
+    // }
+    // gridOut << "\n";
+
+    // for (int i = 0; i < 3; ++i)
+    // {
+    //     gridOut << "     |     |      ";
+    // }
+    // gridOut << "\n";
 
     std::cout << "\n"
                 << gridOut.str() << std::endl;

@@ -37,7 +37,9 @@ Player askForXO()
         std::cout
             << P1
             << ", please choose 'x' or 'o': ";
-        std::cin >> playerStr;
+
+        std::getline(std::cin, playerStr);
+        // std::cin >> playerStr;
         if (playerStr == "x" || playerStr == "o")
         {
             break;
@@ -71,6 +73,7 @@ bool askForRestart()
 int gameplay(const std::unordered_set<int> &opt)
 {
 
+    std::cout << (opt.find(ULTIMATE) != opt.end()) << std::endl;
     if (opt.find(ULTIMATE) != opt.end())
     {
         return ultimateGameplay(opt);
@@ -90,8 +93,9 @@ int gameplay(const std::unordered_set<int> &opt)
 
     while (true)
     {
-        std::cout << playerStr <<  " > ";
-        std::cin >> cmd;
+        std::cout << playerStr << " > ";
+        // std::cin >> cmd;
+        std::getline(std::cin, cmd);
 
         cmd = normalizeStr(cmd);
 
@@ -193,14 +197,17 @@ int ultimateGameplay(const std::unordered_set<int> &opt)
     //
     UltBoard board;
 
-    displayHelp();
+    displayUltHelp();
 
     std::string cmd;
+
+    std::pair<int,int> prevMove { 0, 0 };
 
     while (true)
     {
         std::cout << playerStr << " > ";
-        std::cin >> cmd;
+        // std::cin >> cmd;
+        std::getline(std::cin, cmd);
 
         cmd = normalizeStr(cmd);
 
@@ -210,20 +217,45 @@ int ultimateGameplay(const std::unordered_set<int> &opt)
         }
         else if (isHelp(cmd))
         {
-            displayHelp();
+            displayUltHelp();
         }
         else if (isUltMove(cmd))
         {
+            Player gridWinner;
             auto move{ultCmd2Move(cmd)};
+            bool gridGameOver{board.isGameOver(prevMove.first, prevMove.second, gridWinner)};
+            bool isPrevInNextOut { prevMove.first == move[0] && prevMove.second == move[1] };
+
+            if (isPrevInNextOut && gridGameOver)
+            {
+                std::cout << "\tInvalid move.\n\tRow " << move[0] << " column " 
+                          << move[1]
+                          << " already has a winner. Make a move in any "
+                          << "grid that doesn't have a winner yet."
+                          << std::endl;
+                continue;
+            }
+            else if (prevMove.first != 0 && prevMove.second != 0 &&  (!isPrevInNextOut && !gridGameOver))
+            {
+                std::cout << "\tInvalid move.\n\tYou must select row "
+                          << prevMove.first << " and column "
+                          << prevMove.second << " for the outer board."
+                          << std::endl;
+                continue;
+            }
             if (!board.addMove(playerEnum, move[0], move[1], move[2], move[3] ))
             {
                 std::cout << "\tInvalid move. Try again." << std::endl;
             }
             else
             {
+                auto lastBoardMv{board.lastMove()};
+                prevMove.first = move[2];
+                prevMove.second = move[3];
+
                 if (opt.find(QUIET) == opt.end())
                 {
-                    board.displayBoard();
+                    board.displayFullBoard();
                 }
                 Player winner;
                 bool gameOver = board.isGameOver(winner);
@@ -266,6 +298,9 @@ int ultimateGameplay(const std::unordered_set<int> &opt)
             }
             else
             {
+                auto lastBoardMv{board.lastMove()};
+                prevMove.first = lastBoardMv[2];
+                prevMove.second = lastBoardMv[3];
                 playerStr = otherPlayerStr(playerStr);
                 playerEnum = last;
             }
