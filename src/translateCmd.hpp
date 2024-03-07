@@ -50,6 +50,11 @@ bool isUltDisp(const std::string &inStr);
 bool isRestart(const std::string &inStr);
 
 //
+// Display Program Usage instrucitons
+//
+void displayUsage();
+
+//
 // Help instructions
 //
 void displayHelp();

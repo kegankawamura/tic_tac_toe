@@ -73,7 +73,6 @@ bool askForRestart()
 int gameplay(const std::unordered_set<int> &opt)
 {
 
-    std::cout << (opt.find(ULTIMATE) != opt.end()) << std::endl;
     if (opt.find(ULTIMATE) != opt.end())
     {
         return ultimateGameplay(opt);

@@ -4,12 +4,17 @@
 #include "gameplay.hpp"
 #include "translateCmd.hpp"
 
+//
+// Search for a flag within the string array. 
+//
 bool findCommandOption( char** begin, char** end, const std::string& option )
 {
     return std::find(begin, end, option) != end;
-
 }
 
+//
+// Main TicTacToe function.
+//
 int main( int argc, char* argv[])
 {
 
@@ -25,7 +30,7 @@ int main( int argc, char* argv[])
         //
         // Show instructions
         //
-        displayHelp();
+        displayUsage();
         return 0;
     }
 
@@ -39,6 +44,9 @@ int main( int argc, char* argv[])
         //
         // Play against AI
         //
+        std::cout << "Solo mode is currently in development."
+                  << "Playing the default mode instead."
+                  << std::endl;;
         numOpt++;
     }
 
@@ -67,7 +75,6 @@ int main( int argc, char* argv[])
         // Play ultimate tictactoe
         //
         opt.insert(ULTIMATE);
-        std::cout << "Ultimate" << std::endl;
         numOpt++;
     }
 
@@ -81,7 +88,6 @@ int main( int argc, char* argv[])
         return 1;
     }
 
-    std::cout << (opt.find(ULTIMATE) != opt.end()) << std::endl;
     return gameplay(opt);
 
 }

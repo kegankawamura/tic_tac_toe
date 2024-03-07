@@ -92,6 +92,25 @@ bool isRestart(const std::string &inStr)
     return normalizeStr(inStr) == "restart";
 }
 
+void displayUsage()
+{
+    static const std::string help{
+        "\n\t--- How to use TicTacToe ---\n\n"
+        "This program allows you to play Tic-Tac-Toe through the terminal\n"
+        "with another player. You can call the program without any flags to\n"
+        "play regaular Tic-Tac-Toe with a friend next to you.\n\n"
+        "Usage:\tTicTacToe <flags>\n\n"
+        "Flag List:\n"
+        "\t-h, -help     : Display this message.\n\n"
+        "\t-q, -quiet    : Keep the Tic-Tac-Toe board from displaying after\n"
+        "\t                every move.\n\n"
+        "\t-s, -solo     : Play against an AI (IN DEVELOPMENT)\n\n"
+        "\t-u, -ultimate : Play ultimate Tic-Tac-Toe\n\n"
+    };
+
+    std::cout << help << std::endl;
+}
+
 void displayHelp()
 {
     static const std::string help{
