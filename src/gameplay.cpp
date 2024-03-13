@@ -8,7 +8,9 @@
 static const std::string P1{"Player 1"};
 static const std::string P2{"Player 2"};
 
-
+//
+// Reads the current player's string and then 
+//
 std::string otherPlayerStr(const std::string &p1p2)
 {
     std::string otherPlayer;
@@ -31,6 +33,9 @@ std::string otherPlayerStr(const std::string &p1p2)
 
 Player askForXO()
 {
+    //
+    // Prompt the player 'x' or 'o' until they choose one.
+    //
     std::string playerStr;
     do
     {
@@ -39,21 +44,22 @@ Player askForXO()
             << ", please choose 'x' or 'o': ";
 
         std::getline(std::cin, playerStr);
-        // std::cin >> playerStr;
         if (playerStr == "x" || playerStr == "o")
         {
             break;
         }
     } while (true);
 
+    //
+    // Translate the input string into the proper enumeration.
+    //
     Player playerEnum;
 
     if (playerStr == "x")
     {
         playerEnum = Player::X;
     }
-
-    if (playerStr == "o")
+    else if (playerStr == "o")
     {
         playerEnum = Player::O;
     }
@@ -72,13 +78,20 @@ bool askForRestart()
 
 int gameplay(const std::unordered_set<int> &opt)
 {
-
+    //
+    // If the ULTIMATE option is included in the input, play ultimate
+    // tic-tac-toe instead.
+    //
     if (opt.find(ULTIMATE) != opt.end())
     {
         return ultimateGameplay(opt);
     }
 
-    std::string playerStr { P1 };
+    //
+    // Set up player enumerations and strings.
+    //
+    std::array<std::string, 2> playerStrs { P1, P2 };
+    int pIdx { 0 };
     Player playerEnum { askForXO() };
 
     //
@@ -86,28 +99,45 @@ int gameplay(const std::unordered_set<int> &opt)
     //
     Board board;
 
+    //
+    // Display 'How to play TicTacToe' message.
+    //
     displayHelp();
 
+    //
+    // Begin game loop.
+    //
     std::string cmd;
-
     while (true)
     {
-        std::cout << playerStr << " > ";
-        // std::cin >> cmd;
+        //
+        // Collect player command and normalize.
+        //
+        std::cout << playerStrs[pIdx] << " > ";
         std::getline(std::cin, cmd);
 
         cmd = normalizeStr(cmd);
 
         if (isExit(cmd))
         {
+            //
+            // Exit game.
+            //
             return 0;
         }
         else if (isHelp(cmd))
         {
+            //
+            // Display help message.
+            //
             displayHelp();
         }
         else if (isMove(cmd))
         {
+            //
+            // Handle a move command. Check whether the move can be made on the 
+            // board.
+            //
             auto move { cmd2Move(cmd) };
             if ( !board.addMove(playerEnum, move.first, move.second) )
             {
@@ -123,19 +153,27 @@ int gameplay(const std::unordered_set<int> &opt)
                 bool gameOver = board.isGameOver(winner);
                 if (gameOver)
                 {
+                    //
+                    // The game is over! Check the outcome.
+                    //
                     if (winner != Player::N)
                     {
-                        std::cout << playerStr << " wins the game!" << std::endl;
+                        std::cout << playerStrs[pIdx] << " wins the game!" << std::endl;
                     }
                     else
                     {
                         std::cout << "It's a tie!" << std::endl;
                     }
+
+                    //
+                    // Prompt the user if they want to play a new game.
+                    //
                     if (askForRestart())
                     {
                         board.clear();
                         displayHelp();
-                        playerStr = P1;
+                        // playerStr = P1;
+                        pIdx = 0;
                         playerEnum = askForXO();
                     }
                     else
@@ -146,13 +184,17 @@ int gameplay(const std::unordered_set<int> &opt)
                 }
                 else
                 {
-                    playerStr = otherPlayerStr(playerStr);
+                    // playerStr = otherPlayerStr(playerStr);
+                    pIdx = (++pIdx % 2);
                     playerEnum = otherPlayerEnum(playerEnum);
                 }
             }
         }
         else if (isUndo(cmd))
         {
+            //
+            // Undo the last move.
+            //
             Player last = board.undoLastMove();
             if (last == Player::N)
             {
@@ -160,24 +202,34 @@ int gameplay(const std::unordered_set<int> &opt)
             }
             else
             {
-                playerStr = otherPlayerStr(playerStr);
+                // playerStr = otherPlayerStr(playerStr);
+                pIdx = (++pIdx % 2);
                 playerEnum = last;
             }
         }
         else if (isDisp(cmd))
         {
+            //
+            // Display the board.
+            //
             board.displayBoard();
         }
         else if (isRestart(cmd))
         {
+            //
+            // Restart the game.
+            //
             board.clear();
             displayHelp();
-            playerStr = P1;
+            // playerStr = P1;
+            pIdx = 0;
             playerEnum = askForXO();
         }
         else
         {
-            // Not a valid command
+            //
+            // Invalid command.
+            //
             std::cout << "\tHmm... command not recognized. Try again.\n"
                       << "\tType 'help' to list the valid commands."
                       << std::endl;

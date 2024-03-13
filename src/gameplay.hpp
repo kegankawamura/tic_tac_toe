@@ -18,16 +18,30 @@ static const int QUIET = 0;
 static const int AI = 1;
 static const int ULTIMATE = 2;
 
+//
+// Main gameplay function.
+//
 int gameplay(const std::unordered_set<int>& opt);
 
+//
+// Gameplay for ultimate tic-tac-toe.
+//
 int ultimateGameplay(const std::unordered_set<int> &opt);
 
+//
+// Helper function to swap strings between players.
+//
 std::string otherPlayerStr(const std::string& p1p2);
 
+//
+// Prompt player for 'X' or 'O'.
+//
 Player askForXO();
 
+//
+// Prompt player on whether to restart a new game.
+//
 bool askForRestart();
-
 
 
 #endif
